@@ -20,6 +20,16 @@ const vuetify = createVuetify({
   directives,
 });
 
+//firebase
+import { VueFire, VueFireAuth } from 'vuefire';
+import { firebaseApp } from './config/firebase';
+
+// Firebase
+app.use(VueFire,{
+  firebaseApp,
+  modules:[VueFireAuth()]
+})
+
 app.use(vuetify);
 app.use(createPinia());
 app.use(router);
