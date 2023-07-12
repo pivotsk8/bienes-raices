@@ -1,4 +1,5 @@
 import './assets/main.css';
+import '@mdi/font/css/materialdesignicons.css';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -25,10 +26,10 @@ import { VueFire, VueFireAuth } from 'vuefire';
 import { firebaseApp } from './config/firebase';
 
 // Firebase
-app.use(VueFire,{
+app.use(VueFire, {
   firebaseApp,
-  modules:[VueFireAuth()]
-})
+  modules: [VueFireAuth()],
+});
 
 app.use(vuetify);
 app.use(createPinia());

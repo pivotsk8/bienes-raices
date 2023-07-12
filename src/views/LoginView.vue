@@ -1,27 +1,16 @@
 <script setup>
 import { useForm, useField } from 'vee-validate';
-import { useFirebaseAuth } from 'vuefire';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { loginSchema as validationSchema } from '../validation/loginSchema';
+import { useAuthStore } from '../stores/auth';
 
 const { handleSubmit } = useForm({ validationSchema });
-const auth = useFirebaseAuth();
+const auth = useAuthStore();
 
 const email = useField('email');
 const password = useField('password');
 
-const submit = handleSubmit(async (values) => {
-  try {
-    const result = await signInWithEmailAndPassword(
-      auth,
-      values.email,
-      values.password,
-    );
-    console.log(result);
-  } catch (error) {
-    console.log(error.code);
-    console.log(error.message);
-  }
+const submit = handleSubmit((values) => {
+  auth.login(values);
 });
 </script>
 
@@ -32,6 +21,12 @@ const submit = handleSubmit(async (values) => {
     </VCardTitle>
 
     <VCardSubtitle class="text-h5">iniciar Sesión con tu cuenta</VCardSubtitle>
+
+    <VAlert
+      v-if="auth.hasError"
+      type="error"
+      :title="auth.errorMsg"
+      class="my-5" />
 
     <VForm class="mt-5">
       <VTextField
