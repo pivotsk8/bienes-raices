@@ -1,5 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from './stores/auth';
+
+const auth = useAuthStore();
+const { isAuth } = storeToRefs(auth);
 </script>
 
 <template>
@@ -9,9 +14,16 @@ import { RouterView } from 'vue-router';
         <template v-slot:prepend>
           <VBtn :to="{ name: 'home' }">Bienes-Raices</VBtn>
         </template>
+
         <template v-slot:append>
-          <VBtn :to="{ name: 'home' }">Inicio</VBtn>
-          <VBtn :to="{ name: 'login' }">Iniciar Sesaión</VBtn>
+          <div v-if="isAuth">
+            <VBtn :to="{ name: 'admin-propiedades' }">Admin</VBtn>
+            <VBtn @click="auth.logout">Cerrar Sesaión</VBtn>
+          </div>
+          <div v-else>
+            <VBtn :to="{ name: 'home' }">Inicio</VBtn>
+            <VBtn :to="{ name: 'login' }">Iniciar Sesaión</VBtn>
+          </div>
         </template>
       </v-app-bar>
 
