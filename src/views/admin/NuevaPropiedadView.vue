@@ -34,10 +34,10 @@ const submit = handleSubmit(async (values) => {
   const { imagen, ...propiedad } = values;
 
   // Add a new document with a generated id.
-  const docRef = await addDoc(collection(db, 'cities'), {
-    propiedad,
+  const docRef = await addDoc(collection(db, 'propiedades'), {
+    ...propiedad,
   });
-  console.log('Document written with ID: ', docRef.id);
+
   if (docRef.id) {
     router.push({ name: 'admin-propiedades' });
   }
