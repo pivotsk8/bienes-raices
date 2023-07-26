@@ -1,16 +1,18 @@
 <script setup>
 import { useForm, useField } from 'vee-validate';
 import { collection, addDoc } from 'firebase/firestore';
-// import { useFirestore } from 'vuefire';
-import { db } from '@/firebase';
+import { useFirestore } from 'vuefire';
 import { useRouter } from 'vue-router';
 import { validationSchema, imageSchema } from '@/validation/propiedadSchema';
+import useImage from '@/composables/useImage';
 
 const items = [0, 1, 2, 3, 4, 5];
 
 const router = useRouter();
+
+const { uploadImage } = useImage();
 //va a buscar las credenciales que tenemos
-// const db = useFirestore();
+const db = useFirestore();
 
 const { handleSubmit } = useForm({
   validationSchema: {
@@ -25,7 +27,7 @@ const precio = useField('precio');
 const habitaciones = useField('habitaciones');
 const wc = useField('wc');
 const estacionamiento = useField('estacionamiento');
-const piscina = useField('piscina');
+const piscina = useField('piscina', null, { initialValue: false });
 const descripcion = useField('descripcion');
 
 const submit = handleSubmit(async (values) => {
@@ -33,8 +35,7 @@ const submit = handleSubmit(async (values) => {
 
   // Add a new document with a generated id.
   const docRef = await addDoc(collection(db, 'cities'), {
-    name: 'Tokyo',
-    country: 'Japan',
+    propiedad,
   });
   console.log('Document written with ID: ', docRef.id);
   if (docRef.id) {
@@ -65,6 +66,7 @@ const submit = handleSubmit(async (values) => {
         label="Fotografia"
         prepend-icon="mdi-camera"
         class="mb-5"
+        @change="uploadImage"
         v-model="imagen.value.value"
         :error-messages="imagen.errorMessage.value" />
 
