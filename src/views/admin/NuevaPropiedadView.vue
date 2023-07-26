@@ -10,7 +10,7 @@ const items = [0, 1, 2, 3, 4, 5];
 
 const router = useRouter();
 
-const { uploadImage } = useImage();
+const { url, uploadImage, image } = useImage();
 //va a buscar las credenciales que tenemos
 const db = useFirestore();
 
@@ -36,6 +36,7 @@ const submit = handleSubmit(async (values) => {
   // Add a new document with a generated id.
   const docRef = await addDoc(collection(db, 'propiedades'), {
     ...propiedad,
+    imagen: url.value,
   });
 
   if (docRef.id) {
@@ -69,6 +70,11 @@ const submit = handleSubmit(async (values) => {
         @change="uploadImage"
         v-model="imagen.value.value"
         :error-messages="imagen.errorMessage.value" />
+
+      <div v-if="image" class="my-5">
+        <p class="font-weight-bold">Imagen Propiedad:</p>
+        <img :src="image" alt="imagen" class="w-50" />
+      </div>
 
       <VTextField
         class="mb-5"
