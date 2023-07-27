@@ -1,8 +1,32 @@
-<script setup></script>
+<script setup>
+import usePropiedades from '@/composables/usePropiiedades';
+const { propiedadesCollection } = usePropiedades();
+console.log(propiedadesCollection);
+</script>
 
 <template>
   <h2 class="text-center text-h3 my-5 font-weigth-bold">Admin Panel</h2>
   <VBtn color="blue" variant="flat" :to="{ name: 'nueva-propiedad' }">
     Nueva Propiedad
   </VBtn>
+
+  <VCard class="mx-auto mt-10">
+    <VList>
+      <VListItem v-for="propiedad in propiedadesCollection" :key="propiedad.id">
+        <template v-slot:prepend>
+          <VListItemMedia start="true">
+            <img width="180" :src="propiedad.imagen" />
+          </VListItemMedia>
+        </template>
+
+        <VListItemTitle>{{ propiedad.titulo }}</VListItemTitle>
+        <VListItemSubtitle>{{ propiedad.titulo }}</VListItemSubtitle>
+
+        <template v-slot:append>
+          <VBtn color="info" flat class="mr-2">Editar</VBtn>
+          <VBtn color="red-darken-3" flat>Eliminar</VBtn>
+        </template>
+      </VListItem>
+    </VList>
+  </VCard>
 </template>
