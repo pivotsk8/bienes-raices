@@ -1,7 +1,6 @@
 <script setup>
 import usePropiedades from '@/composables/usePropiiedades';
-const { propiedadesCollection } = usePropiedades();
-console.log(propiedadesCollection);
+const { propiedadesCollection, propertyPrice } = usePropiedades();
 </script>
 
 <template>
@@ -14,13 +13,15 @@ console.log(propiedadesCollection);
     <VList>
       <VListItem v-for="propiedad in propiedadesCollection" :key="propiedad.id">
         <template v-slot:prepend>
-          <VListItemMedia start="true">
+          <VListItemMedia :start="true">
             <img width="180" :src="propiedad.imagen" />
           </VListItemMedia>
         </template>
 
         <VListItemTitle>{{ propiedad.titulo }}</VListItemTitle>
-        <VListItemSubtitle>{{ propiedad.titulo }}</VListItemSubtitle>
+        <VListItemSubtitle>
+          {{ propertyPrice(propiedad.precio) }}
+        </VListItemSubtitle>
 
         <template v-slot:append>
           <VBtn color="info" flat class="mr-2">Editar</VBtn>
