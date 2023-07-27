@@ -24,7 +24,13 @@ const { propiedadesCollection, propertyPrice } = usePropiedades();
         </VListItemSubtitle>
 
         <template v-slot:append>
-          <VBtn color="info" flat class="mr-2">Editar</VBtn>
+          <VBtn
+            color="info"
+            flat
+            class="mr-2"
+            :to="{ name: 'editar-propiedad', params: { id: propiedad.id } }">
+            Editar
+          </VBtn>
           <VBtn color="red-darken-3" flat>Eliminar</VBtn>
         </template>
       </VListItem>
