@@ -1,15 +1,23 @@
 <script setup>
+import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { doc } from 'firebase/firestore';
 import { useDocument, useFirestore } from 'vuefire';
+import 'leaflet/dist/leaflet.css';
+import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
+import useLocationMap from '@/composables/useLocationMap';
 import { propertyPrice } from '../helpers';
 
+const { zoom, center } = useLocationMap();
 const {
   params: { id },
 } = useRoute();
 const db = useFirestore();
 const docRef = doc(db, 'propiedades', id);
 const propiedad = useDocument(docRef);
+watch(propiedad, (propiedad) => {
+  center.value = propiedad.ubicacion;
+});
 </script>
 
 <template>
@@ -50,8 +58,20 @@ const propiedad = useDocument(docRef);
       </VCol>
 
       <VCol cols="12" md="4">
-        <div class="py-10">
-          <p>mapa aqui</p>
+        <div class="py-10" style="height: 600px">
+          <LMap
+            v-model:zoom="zoom"
+            :center="center"
+            :use-global-leaflet="false">
+            <LMarker :lat-lng="center">
+              <LPopup>
+                {{ propiedad.titulo }}
+              </LPopup>
+            </LMarker>
+
+            <LTileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></LTileLayer>
+          </LMap>
         </div>
       </VCol>
     </VRow>
