@@ -1,6 +1,6 @@
 <script setup>
 import { watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useFirestore, useDocument } from 'vuefire';
 import { doc, updateDoc } from 'firebase/firestore';
 import { useField, useForm } from 'vee-validate';
@@ -14,7 +14,6 @@ const items = [1, 2, 3, 4, 5];
 
 const { url, uploadImage, image } = useImage();
 const { zoom, center, pin } = useLocationMap();
-
 const { handleSubmit } = useForm({ validationSchema });
 
 const titulo = useField('titulo');
@@ -29,7 +28,7 @@ const piscina = useField('piscina');
 const {
   params: { id },
 } = useRoute();
-
+const router = useRouter();
 //Obtener la propiedad a editar
 //identificadode del prooyecto
 const db = useFirestore();
@@ -45,11 +44,18 @@ watch(propiedad, (propiedad) => {
   wc.value.value = propiedad.wc;
   estacionamiento.value.value = propiedad.estacionamiento;
   descripcion.value.value = propiedad.descripcion;
-  piscina.value.value = piscina.alberca;
+  piscina.value.value = propiedad.piscina;
   center.value = propiedad.ubicacion;
 });
 
-const submit = handleSubmit((values) => {});
+const submit = handleSubmit(async (values) => {
+  const { imagen, ...propiedad } = values;
+  const data = { ...propiedad, ubicacion: center.value };
+  image.value
+    ? await updateDoc(docRef, { imagen: url.value, ...data })
+    : await updateDoc(docRef, data);
+  router.push({ name: 'admin-propiedades' });
+});
 </script>
 
 <template>
@@ -79,6 +85,16 @@ const submit = handleSubmit((values) => {});
 
       <div class="my-5">
         <p class="font-weight-bold">Imagen Actual:</p>
+        <img
+          v-if="image"
+          class="w-50"
+          :src="image"
+          alt="error al buscar la imagen" />
+        <img
+          v-else
+          class="w-50"
+          :src="propiedad?.imagen"
+          alt="error al buscar la imangen" />
       </div>
 
       <v-text-field
