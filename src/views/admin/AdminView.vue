@@ -32,7 +32,10 @@ const { propiedadesCollection, deleteItem } = usePropiedades();
             :to="{ name: 'editar-propiedad', params: { id: propiedad.id } }">
             Editar
           </VBtn>
-          <VBtn color="red-darken-3" flat @click="deleteItem(propiedad.id)">
+          <VBtn
+            color="red-darken-3"
+            flat
+            @click="deleteItem(propiedad.id, propiedad.imagen)">
             Eliminar
           </VBtn>
         </template>

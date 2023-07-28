@@ -2,7 +2,7 @@
 import usePropiedades from '@/composables/usePropiedades';
 import Propiedad from '@/components/Propiedad.vue';
 import { propertyPrice } from '../helpers';
-const { piscina, propiedadesFiltradas } = usePropiedades();
+const { piscina, filteredItems } = usePropiedades();
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const { piscina, propiedadesFiltradas } = usePropiedades();
 
     <VRow>
       <Propiedad
-        v-for="propiedad in propiedadesFiltradas"
+        v-for="propiedad in filteredItems"
         :key="propiedad.id"
         :propiedad="propiedad"
         :price="propertyPrice" />
